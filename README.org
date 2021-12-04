@@ -1,0 +1,29 @@
+
+
+* Comparação salarial por ocupação (CBO2002)
+
+  Este repositório concentra os scripts necessários para confecção de um /dashboard/ em python (usando a biblioteca =dash=).
+  
+  *Fonte:* Novo CAGED, microdados disponíveis em ftp://ftp.mtps.gov.br/pdet/microdados/, acesso em 04.12.2021.
+
+  Vide =Makefile= para documentação técnica sucinta para construção da base de comparação salarial:
+
+  #+begin_src shell :exports results :results verbatim
+  make help
+  #+end_src
+
+  #+RESULTS:
+  #+begin_example
+  Documentação do Makefile para construção da base de comparação salarial
+
+  Uso:
+	  make [alvo]
+
+  Alvos:
+	  init-debian-based    Instalação dos softwares necessários em distribuições baseadas no Debian
+	  fetch                Baixa e prepara dados brutos do novo caged para importação no banco de dados
+	  db                   Cria e popula banco de dados caged.db com os dados brutos baixados do ftp do governo
+	  help                 Exibe esta mensagem de ajuda
+
+  #+end_example
+
