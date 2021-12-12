@@ -33,6 +33,12 @@ VACUUM;
 CREATE INDEX idx_caged ON caged(competenciamov,regiao,sexo,uf,municipio,secao,subclasse,cbo2002ocupacao,categoria,graudeinstrucao,racacor,tipodedeficiencia,indtrabintermitente,indtrabparcial,indicadoraprendiz,origemdainformacao,tamestabjan,saldomovimentacao);
 
 /* Tabelas de suporte à tabela principal 'caged'  */
+DROP TABLE IF EXISTS competencia;
+CREATE TABLE regiao(
+    mes CHAR(6)
+);
+CREATE INDEX idx_competencia ON competencia(mes);
+
 DROP TABLE IF EXISTS regiao;
 CREATE TABLE regiao(
     codigo CHAR(1),

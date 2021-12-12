@@ -53,6 +53,7 @@ db: ## Cria e popula banco de dados caged.db com os dados brutos baixados do ftp
 	@for f in $(RAW)/*; do                                           \
 	  sqlite3 -separator ";" $(DATA)/caged.db ".import $$f caged";   \
 	done;
+	sqlite3 $(DATA)/caged.db "INSERT INTO competencia(mes) SELECT DISTINCT competenciamov FROM caged";
 	rm $(RAW)/*
 
 .PHONY: help
