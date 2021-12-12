@@ -29,12 +29,16 @@ CREATE TABLE caged(
 );
 VACUUM;
 
+/* Criação de índices para agilizar as consultas  */
+CREATE INDEX idx_caged ON caged(competenciamov,regiao,sexo,uf,municipio,secao,subclasse,cbo2002ocupacao,categoria,graudeinstrucao,racacor,tipodedeficiencia,indtrabintermitente,indtrabparcial,indicadoraprendiz,origemdainformacao,tamestabjan,saldomovimentacao);
+
 /* Tabelas de suporte à tabela principal 'caged'  */
 DROP TABLE IF EXISTS regiao;
 CREATE TABLE regiao(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_regiao ON regiao(codigo);
 INSERT INTO regiao
 VALUES
 	( '1', 'Norte' ),
@@ -45,12 +49,12 @@ VALUES
 	( '9', 'Não identificado' )
 ;
 
-
 DROP TABLE IF EXISTS uf;
 CREATE TABLE uf(
     codigo CHAR(2),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_uf ON uf(codigo);
 INSERT INTO uf
 VALUES
 	( '11', 'Rondônia' ),
@@ -88,6 +92,7 @@ CREATE TABLE municipio(
     codigo CHAR(6),
 	descricao CHAR(50)
 );
+CREATE INDEX idx_municipio ON municipio(codigo);
 INSERT INTO municipio
 VALUES
 	( '110001', 'Ro-Alta Floresta D Oeste' ),
@@ -5757,6 +5762,7 @@ CREATE TABLE secao(
     codigo CHAR(1),
 	descricao CHAR(150)
 );
+CREATE INDEX idx_secao ON secao(codigo);
 INSERT INTO secao
 VALUES
 	( 'A', 'Agricultura, Pecuária, Produção Florestal, Pesca e AqÜIcultura' ),
@@ -5789,6 +5795,7 @@ CREATE TABLE subclasse(
     codigo CHAR(7),
 	descricao CHAR(150)
 );
+CREATE INDEX idx_subclasse ON subclasse(codigo);
 INSERT INTO subclasse
 VALUES
 	( '0111301', 'Cultivo de Arroz' ),
@@ -7156,6 +7163,7 @@ CREATE TABLE categoria(
     codigo CHAR(3),
 	descricao CHAR(150)
 );
+CREATE INDEX idx_categoria ON categoria(codigo);
 INSERT INTO categoria
 VALUES
 	( '101', 'Empregado - Geral, inclusive o empregado público da administração direta ou indireta contratado pela CLT' ),
@@ -7176,6 +7184,7 @@ CREATE TABLE cbo2002ocupacao(
     codigo CHAR(6),
 	descricao CHAR(150)
 );
+CREATE INDEX idx_cbo2002ocupacao ON cbo2002ocupacao(codigo);
 INSERT INTO cbo2002ocupacao
 VALUES
 	( '010105', 'Oficial General da Aeronautica' ),
@@ -9904,6 +9913,7 @@ CREATE TABLE graudeinstrucao(
     codigo CHAR(2),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_graudeinstrucao ON graudeinstrucao(codigo);
 INSERT INTO graudeinstrucao
 VALUES
 	( '1', 'Analfabeto' ),
@@ -9927,6 +9937,7 @@ CREATE TABLE racacor(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_racacor ON racacor(codigo);
 INSERT INTO racacor
 VALUES
 	( '1', 'Branca' ),
@@ -9945,6 +9956,7 @@ CREATE TABLE sexo(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_sexo ON sexo(codigo);
 INSERT INTO sexo
 VALUES
 	( '1', 'Homem' ),
@@ -9958,6 +9970,7 @@ CREATE TABLE tipoempregador(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_tipoempregador ON tipoempregador(codigo);
 INSERT INTO tipoempregador
 VALUES
 	( '0', 'CNPJ RAIZ' ),
@@ -9971,6 +9984,7 @@ CREATE TABLE tipoestabelecimento(
     codigo CHAR(1),
 	descricao CHAR(60)
 );
+CREATE INDEX idx_tipoestabelecimento ON tipoestabelecimento(codigo);
 INSERT INTO tipoestabelecimento
 VALUES
 	( '1', 'CNPJ' ),
@@ -9986,6 +10000,7 @@ CREATE TABLE tipomovimentacao(
     codigo CHAR(2),
 	descricao CHAR(60)
 );
+CREATE INDEX idx_tipomovimentacao ON tipomovimentacao(codigo);
 INSERT INTO tipomovimentacao
 VALUES
 	( '10', 'Admissão por primeiro emprego' ),
@@ -10014,6 +10029,7 @@ CREATE TABLE tipodeficiencia(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_tipodeficiencia ON tipodeficiencia(codigo);
 INSERT INTO tipodeficiencia
 VALUES
 	( '0', 'Não Deficiente' ),
@@ -10031,6 +10047,7 @@ CREATE TABLE indtrabintermitente(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_indtrabintermitente ON indtrabintermitente(codigo);
 INSERT INTO indtrabintermitente
 VALUES
 	( '0', 'Não' ),
@@ -10044,6 +10061,7 @@ CREATE TABLE indtrabparcial(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_indtrabparcial ON indtrabparcial(codigo);
 INSERT INTO indtrabparcial
 VALUES
 	( '0', 'Não' ),
@@ -10057,6 +10075,7 @@ CREATE TABLE tamestabjan(
     codigo CHAR(2),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_tamestabjan ON tamestabjan(codigo);
 INSERT INTO tamestabjan
 VALUES
 	( '1', 'Zero' ),
@@ -10081,6 +10100,7 @@ CREATE TABLE indicadoraprendiz(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_indicadoraprendiz ON indicadoraprendiz(codigo);
 INSERT INTO indicadoraprendiz
 VALUES
 	( '0', 'Não' ),
@@ -10094,6 +10114,7 @@ CREATE TABLE origemdainformacao(
     codigo CHAR(1),
 	descricao CHAR(30)
 );
+CREATE INDEX idx_origemdainformacao ON origemdainformacao(codigo);
 INSERT INTO origemdainformacao
 VALUES
 	( '1', 'eSocial' ),
