@@ -32,60 +32,80 @@ ref_educ  = pd.read_sql_query( con = conn, sql = "select codigo + 0E0, descricao
 
 
 # Escolha do horizonte temporal
-date_slider = html.Div([
-    dcc.RangeSlider(
-        id      ='id_date_slider',
-        min     = 0,
-        max     = len(comp)-1,
-        marks   = {comp.index(s): str(s) for s in comp},
-        value   = [ 0, len(comp)-1 ],
-        tooltip = {"placement": "bottom", "always_visible": False}
+date_choice = html.Div(children = [
+    #html.P("Horizonte temporal da análise: "),
+    html.Label("De: "),
+    dcc.Dropdown(
+        id='from-date-dropdown',
+        options=[{'label': i, 'value':i} for i in comp],
+        clearable=False,
+        value=comp[0]
     ),
-    html.Div(id='output-container-date-slider')
+    html.Label("Até: "),
+    dcc.Dropdown(
+        id='to-date-dropdown',
+        options=[{'label': i, 'value':i} for i in comp],
+        clearable=False,
+        value=comp[-1]
+    )
 ])
 
 # Escolha da profissão
-occp_dropdown = html.Div([
+occp_dropdown = html.Div(children = [
+    html.Label("Ocupação (CBO2002): "),
     dcc.Dropdown(
         id='occp-dropdown',
         options=[{'label': i, 'value':i} for i in occp['occp']],
         clearable=False,
         value='211205 - Estatistico'
-    ),
-    html.Div(id='output-container-occp-dropdown')
+    )
 ])
 
 # Escolha do CNAE de referência
-cnae_dropdown = html.Div([
+cnae_dropdown = html.Div(children = [
+    html.Label("Seção do CNAE: "),
     dcc.Dropdown(
         id='cnae-dropdown',
         options=[{'label': i, 'value':i} for i in ref_cnae],
         clearable=False,
         value='Q - Saúde Humana e Serviços Sociais'
-    ),
-    html.Div(id='output-container-cnae-dropdown')
+    )
 ])
 
 # Escolha do Porte de referência
-porte_dropdown = html.Div([
+porte_dropdown = html.Div(children = [
+    html.Label("Porte da empresa: "),
     dcc.Dropdown(
         id='porte-dropdown',
         options=[{'label': i, 'value':i} for i in ref_porte],
         clearable=False,
         value='De 100 a 249'
-    ),
-    html.Div(id='output-container-porte-dropdown')
+    )
 ])
 
 # Escolha da UF de referência
-uf_dropdown = html.Div([
-    dcc.Dropdown(
-        id='uf-dropdown',
-        options=[{'label': i, 'value':i} for i in ref_uf],
-        clearable=False,
-        value='São Paulo'
-    ),
-    html.Div(id='output-container-uf-dropdown')
+# uf_dropdown = html.Div(children = [
+#     html.Label("Estado: "),
+#     dcc.Dropdown(
+#         id='uf-dropdown',
+#         options=[{'label': i, 'value':i} for i in ref_uf],
+#         clearable=False,
+#         value='São Paulo'
+#     )
+# ])
+
+
+# Escolha da função de agregação (mediana ou média)
+agg_radioitem = html.Div(children = [
+    html.Label(["Função de agregação mensal: "]),
+    dcc.RadioItems(
+        options=[
+            {'label': ' Mediana ', 'value': 'median'},
+            {'label': ' Média ', 'value': 'mean'}
+        ],
+        value='median',
+        labelStyle={'display': 'inline-block'}
+    )
 ])
 
 
@@ -95,28 +115,67 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # Graphs
 
+# estilo (CSS) para a barra lateral esquerda
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "20rem",
+    "padding": "2rem 1rem",
+    "background-color": "#f8f9fa",
+}
+
+# barra lateral esquerda
+sidebar = html.Div(
+    [
+        date_choice,
+        html.Br(),
+        occp_dropdown,
+        html.Br(),
+        cnae_dropdown,
+        html.Br(),
+        porte_dropdown,
+        html.Br(),
+        # uf_dropdown,
+        # html.Br(),
+        agg_radioitem
+    ],
+    style = SIDEBAR_STYLE,
+)
+
+# estilo para a barra de conteúdo (direita)
+CONTENT_STYLE = {
+    "margin-left": "22rem",
+    "margin-right": "2rem",
+    "padding": "2rem 1rem",
+}
+
+content = html.Div(children =
+    [
+        html.H3("Comparativo salarial (base CAGED/eSocial)")
+    ],
+    style=CONTENT_STYLE,
+)
 
 
 # App.layout
 
+
 ## Dash Bootstrap !!
-app.layout = dbc.Container(
-    [
-        html.H1("Comparativo salarial (base CAGED/eSocial)"),
-        html.Hr(),
-        html.P("Horizonte temporal da análise: "),
-        date_slider,
-        html.P("Ocupação: "),
-        occp_dropdown,
-        html.P("Seção do CNAE: "),
-        cnae_dropdown,
-        html.P("Porte da empresa: "),
-        porte_dropdown,
-        html.P("Estado: "),
-        uf_dropdown
-    ], # dbc.container
-    fluid=True,
-)
+app.layout = html.Div( [sidebar, content] )
+
+# callbacks
+@app.callback(
+    dash.dependencies.Output('to-date-dropdown', 'options'),
+    [dash.dependencies.Input('from-date-dropdown', 'value')])
+def update_output(value):
+    comp_max = []
+    for mes in comp:
+        if mes >= value:
+            comp_max.append(mes)
+    return [{'label': i, 'value':i} for i in comp_max]
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
